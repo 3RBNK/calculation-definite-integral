@@ -1,10 +1,9 @@
 import math as mt
-import numpy as np
 import matplotlib.pyplot as plt
 
 
 def f(x: float) -> float:
-    return (x ** 0.5) * mt.sin(x / 6.0) + 5
+    return x * mt.sin(x / 6.0) + 2
 
 
 def print_square(x: float, a: float, b: float):
@@ -18,53 +17,68 @@ def print_square(x: float, a: float, b: float):
     plt.plot([x1, x2], [y1, y2], color="black")
     plt.plot([x3, x4], [y3, y4], color="black")
 
+    # горизонтальные прямые прямоугольника
+    plt.plot([x1, x3], [y1, y3], color="black")
+    plt.plot([x2, x4], [y2, y4], color="black")
 
-n = 5
-a = 5
-b = 10
 
+n = 10
+a = -5
+b = 1
 
 s = 0
 x_shift: float = (b - a) / n
 x_current: float = a + ((b - a) / n)
-x_last = a
+x_last: float = a
 
 for i in range(n):
-    print(f"x last: {x_last} x current: {x_current}")
-
     height = f(x_current)
-    print(f"height: {height}")
     weight = x_current - x_last
 
-    s += height + weight
+    s += height * weight
 
     print_square(x_last, height, weight)
 
     x_last = x_current
     x_current += x_shift
 
-    print()
 
+axis_min: int = int(0.8 * a if a > 0 else 1.5 * a)
+axis_max: int = int(1.2 * b if b > 0 else 0.8 * b)
 
-print(f"S: {s:.3f}")
+print(f"min: {axis_min}, max: {axis_max}")
+
 
 # определяем значения на оси x и вычисляем значение y = f(x)
-x_value = [x // 1000.0 for x in range(0, 12000)]
+x_value = [x / 100.0 for x in range(axis_min * 100, axis_max * 100)]
 y_value = [f(x) for x in x_value]
+
+
+# пишет площадь
+plt.text(axis_min + (axis_max - axis_min) * 0.001, axis_min + (axis_max - axis_min) * 0.99, f"S: {s:.3f} \nN: {n}", fontsize=16)
 
 # рисуем график
 plt.plot(x_value, y_value, color="red")
 
 # пределы интегрирования
-plt.axvline(5, -1, 12, linestyle="-", color="blue")
-plt.axvline(10, -1, 12, linestyle="-", color="blue")
+plt.axvline(a, 0, linestyle="-", color="blue")
+plt.axvline(b, 0, linestyle="-", color="blue")
 
 # оси координат
-plt.axhline(0, -1, 12, linestyle="--", color="black")
-plt.axvline(0, -1, 12, linestyle="--", color="black")
+plt.axhline(0, linestyle="--", color="black")
+plt.axvline(0, linestyle="--", color="black")
+
+# сетка
+plt.grid(True)
+
+# плотность сетки
+shift_to_print = (axis_max - axis_min) * (1.0 / 5.0)
+
+plt.xticks(range(int(axis_min - shift_to_print), int(axis_max + shift_to_print)))
+plt.yticks(range(int(axis_min - shift_to_print), int(axis_max + shift_to_print)))
 
 # диапазон значений
-plt.xlim(-1, 12)
-plt.ylim(-1, 12)
+plt.xlim(axis_min - shift_to_print, axis_max + shift_to_print)
+plt.ylim(axis_min - shift_to_print, axis_max + shift_to_print)
 
 plt.show()
