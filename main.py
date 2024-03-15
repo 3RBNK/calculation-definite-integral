@@ -1,9 +1,9 @@
-import math as mt
+import numpy as np
 import matplotlib.pyplot as plt
 
 
 def f(x: float) -> float:
-    return x * mt.sin(x / 6.0) + 2
+    return np.sin(x) * np.sqrt(x)
 
 
 def print_square(x: float, a: float, b: float):
@@ -33,9 +33,9 @@ def print_square(x: float, a: float, b: float):
 
 
 def main():
-    n = 100
-    a = -10
-    b = 35
+    n = 200
+    a = 0
+    b = 10
 
     s = 0
     x_shift: float = (b - a) / n
@@ -65,11 +65,11 @@ def main():
     axis_x_length = axis_x_max - axis_x_min
 
     # определяем значения на оси x и вычисляем значение y = f(x)
-    x_value = [x / 100.0 for x in range(a * 100, b * 100)]
+    x_value = [x / 100.0 for x in range(int(a * 100), int(b * 100))]
     y_value = [f(x) for x in x_value]
 
-    axis_y_min = mt.floor(min(y_value))
-    axis_y_max = mt.ceil(max(y_value))
+    axis_y_min = np.floor(min(y_value))
+    axis_y_max = np.ceil(max(y_value))
 
     axis_y_length = axis_y_max - axis_y_min
 
@@ -90,21 +90,21 @@ def main():
     plt.axvline(0, linestyle="--", color="black")
 
     # сетка
-    plt.grid(True)
+    plt.grid(True, color="black", alpha=0.15)
 
     # границы графика
-    border_const_1 = 0.17
-    border_const_2 = 0.05
+    border_gain_1 = 0.05
+    border_gain_2 = 0.002
 
-    x_left_border = axis_x_min - axis_x_length * border_const_1 if axis_x_min < 0 else 0 - axis_x_length * border_const_2
-    x_right_border = axis_x_max + axis_x_length * border_const_1 if axis_x_max > 0 else 0 + axis_x_length * border_const_2
+    x_left_border = axis_x_min - axis_x_length * border_gain_1 if axis_x_min < 0 else 0 - axis_x_length * border_gain_2
+    x_right_border = axis_x_max + axis_x_length * border_gain_1 if axis_x_max > 0 else 0 + axis_x_length * border_gain_2
 
-    y_back_border = axis_y_min - axis_y_length * border_const_1 if axis_y_min < 0 else 0 - axis_y_length * border_const_2
-    y_top_border = axis_y_max + axis_y_length * border_const_1 if axis_y_max > 0 else 0 + axis_y_length * border_const_2
+    y_back_border = axis_y_min - axis_y_length * border_gain_1 if axis_y_min < 0 else 0 - axis_y_length * border_gain_2
+    y_top_border = axis_y_max + axis_y_length * border_gain_1 if axis_y_max > 0 else 0 + axis_y_length * border_gain_2
 
     # плотность сетки
-    plt.xticks(range(int(x_left_border), int(x_right_border)))
-    plt.yticks(range(int(y_back_border), int(y_top_border)))
+    plt.xticks(range(int(x_left_border), int(x_right_border), 1), fontsize="9")
+    plt.yticks(range(int(y_back_border), int(y_top_border)), fontsize="9")
 
     # диапазон значений
     plt.xlim(x_left_border, x_right_border)
