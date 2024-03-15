@@ -7,11 +7,18 @@ def f(x: float) -> float:
 
 
 def print_square(x: float, a: float, b: float):
-    x1, y1 = [x, 0]
-    x2, y2 = [x, a]
+    if a > 0:
+        x1, y1 = [x, 0]
+        x2, y2 = [x, a]
 
-    x3, y3 = [x + b, 0]
-    x4, y4 = [x + b, a]
+        x3, y3 = [x + b, 0]
+        x4, y4 = [x + b, a]
+    else:
+        x1, y1 = [x, a]
+        x2, y2 = [x, 0]
+
+        x3, y3 = [x + b, a]
+        x4, y4 = [x + b, 0]
 
     # вертикальные прямые прямоугольника
     plt.plot([x1, x2], [y1, y2], color="grey")
@@ -21,14 +28,14 @@ def print_square(x: float, a: float, b: float):
     plt.plot([x1, x3], [y1, y3], color="grey")
     plt.plot([x2, x4], [y2, y4], color="grey")
 
-    #заливка
+    # заливка
     plt.fill_between([x1, x3], 0, a, color="grey", alpha=0.5)
 
 
 def main():
-    n = 16
+    n = 100
     a = -10
-    b = 19
+    b = 35
 
     s = 0
     x_shift: float = (b - a) / n
@@ -39,7 +46,11 @@ def main():
         height = f(x_current)
         weight = x_current - x_last
 
-        s += height * weight
+        square = height * weight
+        if square < 0:
+            square *= -1
+
+        s += square
 
         print_square(x_last, height, weight)
 
